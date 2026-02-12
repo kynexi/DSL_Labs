@@ -22,12 +22,10 @@ class FiniteAutomation {
     }
 
     public boolean accepts(String input) {
-
         Set<String> currentStates = new HashSet<>();
         currentStates.add(startState);
 
         for (char symbol : input.toCharArray()) {
-
             Set<String> nextStates = new HashSet<>();
 
             for (String state : currentStates) {
@@ -39,7 +37,6 @@ class FiniteAutomation {
             }
 
             currentStates = nextStates;
-
             if (currentStates.isEmpty()) {
                 return false;
             }

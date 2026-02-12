@@ -1,7 +1,6 @@
 import java.util.*;
 
 class Grammar {
-
     Set<String> VN;
     Set<String> VT;
     Map<String, List<String>> productions;
@@ -65,12 +64,10 @@ class Grammar {
                 char terminal = production.charAt(0);
 
                 if (production.length() == 1) {
-                    // A → a
                     transitions.get(left)
                             .computeIfAbsent(terminal, k -> new HashSet<>())
                             .add(finalState);
                 } else {
-                    // A → aB
                     String nextState = String.valueOf(production.charAt(1));
                     transitions.get(left)
                             .computeIfAbsent(terminal, k -> new HashSet<>())

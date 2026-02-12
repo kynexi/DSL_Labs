@@ -15,20 +15,20 @@ public class Main {
         productions.put("L", Arrays.asList("aL", "c"));
         Grammar grammar = new Grammar(VN, VT, productions, "S");
 
-        System.out.println("Generated strings:");
+        System.out.println("Strings generated:");
         for (String s : grammar.generateFiveStrings()) {
             System.out.println(s);
         }
 
         FiniteAutomation fa = grammar.toFA();
 
-        System.out.println("\nAcceptance tests:");
-        System.out.println("d -> " + fa.accepts("d"));
-        System.out.println("bd -> " + fa.accepts("bd"));
-        System.out.println("ab -> " + fa.accepts("ab"));
-        System.out.println("aac -> " + fa.accepts("aac"));
-        System.out.println("bbbbd -> " + fa.accepts("bbbbd"));
-        System.out.println("xyz -> " + fa.accepts("xyz"));
-        System.out.println("hamham -> " + fa.accepts("xyz"));
+        System.out.println("\nTests:");
+        System.out.println("d : " + fa.accepts("d"));
+        System.out.println("bd : " + fa.accepts("bd"));
+        System.out.println("ab : " + fa.accepts("ab"));
+        System.out.println("aac : " + fa.accepts("aac"));
+        System.out.println("bbbbd : " + fa.accepts("bbbbd"));
+        System.out.println("xyz : " + fa.accepts("xyz"));
+        System.out.println("hamham : " + fa.accepts("xyz"));
     }
 }

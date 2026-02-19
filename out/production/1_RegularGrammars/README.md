@@ -1,91 +1,187 @@
-# Laboratory Work 1
+# Laboratory Work 1, Grammars and Finite Automata
 
 ### Course: Formal Languages & Finite Automata
-### Author: Brînză Vasile, FAF-242
+### Author: Brînză Vasile
+### Group: FAF-242
 
 ----
 
 ## Theory
-A formal language is a set of strings formed from a finite alphabet according to specific rules. Unlike natural languages, formal languages have precise definitions suitable for mathematical analysis and computation.
-A formal grammar consists of non-terminal symbols, terminal symbols, a start symbol, and production rules. Grammars generate strings by starting from the start symbol and applying production rules until only terminals remain.
-A finite automaton recognizes strings by processing input symbols through state transitions. It accepts a string if it ends in a final state after consuming all input. Regular grammars can be directly converted to finite automata, establishing equivalence between generative and recognitive approaches.
 
+In formal language theory, there is a close relationship between grammars and automata. 
+A grammar defines a language by generating strings, while an automaton recognizes or accepts strings from a language. 
+The conversion from a grammar to a finite automaton enables us to verify whether a given string belongs to the language defined by the grammar.
 
 ## Objectives:
 
 * Discover what a language is and what it needs to have to be considered a formal one;
 * Provide the initial setup for the evolving project;
-* According to the variant number, get the grammar definition and do the following <br>
-  a. Implement a type/class for your grammar; <br>
-  b. Add one function that would generate 5 valid strings from the language expressed by your given grammar; <br>
-  c. Implement some functionality that would convert an object of type Grammar to one of type Finite Automaton; <br>
+* According to the variant number, get the grammar definition and do the following:
+
+  a. Implement a type/class for your grammar;
+
+  b. Add one function that would generate 5 valid strings from the language expressed by your given grammar; 
+
+  c. Implement some functionality that would convert an object of type Grammar to one of type Finite Automaton; 
+
   d. For the Finite Automaton, please add a method that checks if an input string can be obtained via the state transition from it.
 
 ## Implementation description
 
-The Grammar class stores the grammar components: non-terminals {S, D, E, J}, terminals {a, b, c, d, e}, start symbol "S", and production rules in a HashMap for efficient access.
+#### Grammar Class:
+This class is responsible for storing the data about the symbols that compose the grammar and use them to generate strings or transform to FiniteAutomaton.
 
 ```java
-public Grammar() {
-    nonTerminals = new HashSet<>(Arrays.asList("S", "D", "E", "J"));
-    terminals = new HashSet<>(Arrays.asList("a", "b", "c", "d", "e"));
-    startSymbol = "S";
-    productions = new HashMap<>();
-    productions.put("S", Arrays.asList("aD"));
-    productions.put("D", Arrays.asList("dE", "bJ", "aE"));
-    productions.put("J", Arrays.asList("cS"));
-    productions.put("E", Arrays.asList("e", "aE"));
-}
-```
+import java.util.*;
 
-The generateString() method starts from the start symbol and randomly selects production rules, appending terminals and following non-terminals until derivation completes.
+class Grammar {
+    Set<String> VN;
+    Set<String> VT;
+    Map<String, List<String>> productions;
+    String startSymbol;
 
-```java
-public String generateString() {
-    String current = startSymbol;
-    StringBuilder result = new StringBuilder();
-    while (nonTerminals.contains(current)) {
-        List<String> rules = productions.get(current);
-        String rule = rules.get(random.nextInt(rules.size()));
-        result.append(rule.charAt(0));
-        if (rule.length() == 2) {
-            current = String.valueOf(rule.charAt(1));
-        } else {
-            break;
-        }
+    public Grammar(Set<String> VN, Set<String> VT,
+                   Map<String, List<String>> productions,
+                   String startSymbol) {
+        this.VN = VN;
+        this.VT = VT;
+        this.productions = productions;
+        this.startSymbol = startSymbol;
     }
-    return result.toString();
+
+    public String generateString() {
+        StringBuilder result = new StringBuilder();
+        String current = startSymbol;
+        Random random = new Random();
+
+        while (true) {
+            List<String> rules = productions.get(current);
+            String production = rules.get(random.nextInt(rules.size()));
+
+            if (production.length() == 1) {
+                result.append(production);
+                break;
+            } else {
+                result.append(production.charAt(0));
+                current = String.valueOf(production.charAt(1));
+            }
+        }
+
+        return result.toString();
+    }
+
+    public List<String> generateFiveStrings() {
+        Set<String> results = new HashSet<>();
+        while (results.size() < 5) {
+            results.add(generateString());
+        }
+        return new ArrayList<>(results);
+    }
+
+    public FiniteAutomation toFA() {
+
+        Set<String> states = new HashSet<>(VN);
+        Set<String> finalStates = new HashSet<>();
+        Map<String, Map<Character, Set<String>>> transitions = new HashMap<>();
+
+        String finalState = "Qf";
+        states.add(finalState);
+        finalStates.add(finalState);
+
+        for (String state : states) {
+            transitions.put(state, new HashMap<>());
+        }
+
+        for (String left : productions.keySet()) {
+            for (String production : productions.get(left)) {
+
+                char terminal = production.charAt(0);
+
+                if (production.length() == 1) {
+                    transitions.get(left)
+                            .computeIfAbsent(terminal, k -> new HashSet<>())
+                            .add(finalState);
+                } else {
+                    String nextState = String.valueOf(production.charAt(1));
+                    transitions.get(left)
+                            .computeIfAbsent(terminal, k -> new HashSet<>())
+                            .add(nextState);
+                }
+            }
+        }
+
+        return new FiniteAutomation(states, VT, transitions,
+                startSymbol, finalStates);
+    }
 }
 ```
 
-The conversion maps each nonterminal to a state and creates transitions according to production rules. Productions ending with non-terminals transition to that state; terminal-only productions go to a final state "F".
+#### Finite Automaton Class
+
+This class represents the Finite Automaton and it allows checking if a string belongs to a language
 
 ```java
-public FiniteAutomaton toFiniteAutomaton() {
-    Set<String> states = new HashSet<>(nonTerminals);
-    states.add("F");
-    Map<String, Map<String, Set<String>>> transitions = new HashMap<>();
-    for (String state : productions.keySet()) {
-        for (String rule : productions.get(state)) {
-            String symbol = String.valueOf(rule.charAt(0));
-            String nextState = (rule.length() == 2) ? 
-                String.valueOf(rule.charAt(1)) : "F";
-            transitions.get(state).get(symbol).add(nextState);
-        }
-    }
-    return new FiniteAutomaton(states, terminals, transitions, 
-        startSymbol, new HashSet<>(Arrays.asList("F")));
-}
-```
+import java.util.*;
 
-The automaton tracks all possible current states, processes each input character by computing reachable next states, and accepts if any final state is reached.
-Strings like "ade" and "aae" are accepted because they follow valid derivation paths (S -> aD -> ade, S -> aD -> aE -> aae), while invalid strings are correctly rejected. The grammar-to-automaton conversion preserves the language definition, confirming the equivalence between the two representations.
+class FiniteAutomation {
+
+    Set<String> states;
+    Set<String> alphabet;
+    Map<String, Map<Character, Set<String>>> transitions;
+    String startState;
+    Set<String> finalStates;
+
+    public FiniteAutomation(Set<String> states,
+                           Set<String> alphabet,
+                           Map<String, Map<Character, Set<String>>> transitions,
+                           String startState,
+                           Set<String> finalStates) {
+
+        this.states = states;
+        this.alphabet = alphabet;
+        this.transitions = transitions;
+        this.startState = startState;
+        this.finalStates = finalStates;
+    }
+
+    public boolean accepts(String input) {
+        Set<String> currentStates = new HashSet<>();
+        currentStates.add(startState);
+
+        for (char symbol : input.toCharArray()) {
+            Set<String> nextStates = new HashSet<>();
+
+            for (String state : currentStates) {
+                if (transitions.get(state).containsKey(symbol)) {
+                    nextStates.addAll(
+                            transitions.get(state).get(symbol)
+                    );
+                }
+            }
+
+            currentStates = nextStates;
+            if (currentStates.isEmpty()) {
+                return false;
+            }
+        }
+
+        for (String state : currentStates) {
+            if (finalStates.contains(state)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+
+```
 
 ## Conclusions
 
 <div align="center">
-  <img src="resources/image.png" alt="Result of a run" width="50%">
+  <img src="resources/img.png" alt="Result of a run" width="30%">
   <p>Figure 1 - Result of a run</p>
 </div>
 
-This laboratory work successfully implemented the core concepts of formal language theory. The Grammar class generates valid strings through random application of production rules, while the FiniteAutomaton class recognizes whether strings belong to the language. The conversion between these two representations preserves the language definition, confirming their theoretical equivalence.
+This lab showed how a grammar can generate strings and a finite automaton can check if a string belongs to the same language. Converting the grammar to an automaton confirmed they represent the same language. It helped understand how formal language theory works in practice.

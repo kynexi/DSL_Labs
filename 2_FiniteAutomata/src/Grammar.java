@@ -83,19 +83,24 @@ class Grammar {
     public String classifyGrammar() {
         boolean isRegular = true;
         boolean isContextFree = true;
+        // assume grammar is regular / context-free
 
-        for (Map.Entry<String, List<String>> entry : productions.entrySet()) {
-            String left = entry.getKey();
+        for (String left : productions.keySet()) {
+            // type 2 and 3 must have exactly one non-terminal on LHS
             if (left.length() != 1 || !VN.contains(left)) {
                 isRegular = false;
                 isContextFree = false;
                 break;
             }
 
-            for (String right : entry.getValue()) {
+            List<String> rights = productions.get(left);
+            for (String right : rights) {
+                // when right-hand side has more than 2 symbols, cannot be regular
                 if (right.length() > 2) {
                     isRegular = false;
                 }
+
+                // right-hand side shorter than LHS, cannot be context-sensitive
                 if (right.length() < left.length()) {
                     return "Type 0 (Unrestricted)";
                 }

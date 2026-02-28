@@ -1,6 +1,4 @@
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 class FiniteAutomation {
 
@@ -51,5 +49,38 @@ class FiniteAutomation {
         }
 
         return false;
+    }
+
+    public Grammar toRegularGrammar() {
+        Set<String> VN = new HashSet<>(states);
+
+        Set<String> VT = new HashSet<>();
+        for (String symbol : alphabet) {
+            VT.add(symbol);
+        }
+
+        Map<String, List<String>> productions = new HashMap<>();
+
+        for (String state : states) {
+            List<String> rules = new ArrayList<>();
+            Map<Character, Set<String>> trans = transitions.get(state);
+
+            for (Character symbol : trans.keySet()) {
+                Set<String> targets = trans.get(symbol);
+                for (String target : targets) {
+                    // when the target is final, add terminal-only production
+                    if (finalStates.contains(target)) {
+                        rules.add(symbol.toString());
+                    }
+                    rules.add(symbol + target);
+                }
+            }
+
+            if (!rules.isEmpty()) {
+                productions.put(state, rules);
+            }
+        }
+
+        return new Grammar(VN, VT, productions, startState);
     }
 }

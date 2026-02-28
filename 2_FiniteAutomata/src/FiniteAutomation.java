@@ -97,4 +97,66 @@ class FiniteAutomation {
         }
         return true;
     }
+
+    public FiniteAutomation convertToDFA() {
+        Map<Set<String>, String> mapping = new HashMap<>();
+        Set<String> dfaStates = new HashSet<>();
+        Set<String> dfaFinalStates = new HashSet<>();
+        Map<String, Map<Character, Set<String>>> dfaTransitions = new HashMap<>();
+        Queue<Set<String>> queue = new LinkedList<>();
+
+        // initial state
+        Set<String> startSet = new HashSet<>();
+        startSet.add(startState);
+        mapping.put(startSet, "D0");
+        queue.add(startSet);
+        dfaStates.add("D0");
+
+        int counter = 1;
+
+        while (!queue.isEmpty()) {
+            Set<String> currentSet = queue.poll();
+            String currentName = mapping.get(currentSet);
+            dfaTransitions.put(currentName, new HashMap<>());
+
+            // looping over alphabet
+            for (String symbolStr : alphabet) {
+                if (symbolStr.length() != 1) continue; // invalid symbols
+                char symbol = symbolStr.charAt(0);
+                Set<String> nextSet = new HashSet<>();
+                for (String state : currentSet) {
+                    Map<Character, Set<String>> stateTrans = transitions.get(state);
+                    if (stateTrans.containsKey(symbol)) {
+                        nextSet.addAll(stateTrans.get(symbol));
+                    }
+                }
+
+                if (!nextSet.isEmpty()) {
+                    String nextName;
+                    if (mapping.containsKey(nextSet)) {
+                        nextName = mapping.get(nextSet);
+                    } else {
+                        nextName = "D" + counter++;
+                        mapping.put(nextSet, nextName);
+                        queue.add(nextSet);
+                        dfaStates.add(nextName);
+                    }
+
+                    dfaTransitions.get(currentName).put(symbol, Set.of(nextName));
+                }
+            }
+        }
+
+        // DFA final states
+        for (Set<String> ndfaSet : mapping.keySet()) {
+            for (String s : ndfaSet) {
+                if (finalStates.contains(s)) {
+                    dfaFinalStates.add(mapping.get(ndfaSet));
+                    break;
+                }
+            }
+        }
+
+        return new FiniteAutomation(dfaStates, alphabet, dfaTransitions, "D0", dfaFinalStates);
+    }
 }

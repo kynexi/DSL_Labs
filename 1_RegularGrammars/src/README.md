@@ -31,7 +31,7 @@ The conversion from a grammar to a finite automaton enables us to verify whether
 ### Grammar Class:
 This class is responsible for storing the data about the symbols that compose the grammar and use them to generate strings or transform to FiniteAutomaton.
 
-##### generateString()
+##### generateString() 
 
 ```java
 public String generateString() {

@@ -83,4 +83,18 @@ class FiniteAutomation {
 
         return new Grammar(VN, VT, productions, startState);
     }
+
+    public boolean isDeterministic() {
+        for (String state : transitions.keySet()) {
+            Map<Character, Set<String>> trans = transitions.get(state);
+            for (char symbol : trans.keySet()) {
+                Set<String> targets = trans.get(symbol);
+                // more than one target means non-deterministic
+                if (targets.size() > 1) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }

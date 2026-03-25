@@ -1,0 +1,27 @@
+Regex: (a|b)(c|d)E+G?
+  -> acEEE
+  -> adEE
+  -> adEEEE
+  -> acEEEE
+  -> adEEEG
+
+----------------------
+
+Regex: P(Q|R|S)T(UV|W|X)*Z+
+  -> PSTUVXXXZZ
+  -> PQTUVZZZZ
+  -> PRTUVWXWZZ
+  -> PRTZ
+  -> PQTXUVUVZZZZ
+
+----------------------
+
+Regex: 1(0|1)*2(3|4){5}36
+  -> 1124443436
+  -> 1024444336
+  -> 10023343336
+  -> 10023443436
+  -> 1023444436
+
+----------------------
+

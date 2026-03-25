@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/1_RegularGrammars/1_RegularGrammars.iml" filepath="$PROJECT_DIR$/1_RegularGrammars/1_RegularGrammars.iml" />
       <module fileurl="file://$PROJECT_DIR$/2_FiniteAutomata/2_FiniteAutomata.iml" filepath="$PROJECT_DIR$/2_FiniteAutomata/2_FiniteAutomata.iml" />
+      <module fileurl="file://$PROJECT_DIR$/3_LexerScanner/3_LexerScanner.iml" filepath="$PROJECT_DIR$/3_LexerScanner/3_LexerScanner.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/DSL_Labs.iml" filepath="$PROJECT_DIR$/.idea/DSL_Labs.iml" />
     </modules>
   </component>

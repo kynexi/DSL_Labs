@@ -22,6 +22,13 @@ public class Main {
                 String result = generator.generate(regex);
                 pw.println("  -> " + result);
             }
+            pw.println("---\n");
+
+            pw.println("Processing steps:");
+            List<String> steps = ProcessingLogger.explain(regex);
+            for (String step : steps) {
+                pw.println("  " + step);
+            }
 
             pw.println("\n----------------------\n");
         }

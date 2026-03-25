@@ -39,12 +39,30 @@ public class RegexParser {
 
     private RegexNode parseAlternation() {
         AlternationNode alt = new AlternationNode();
+        StringBuilder sb = new StringBuilder();
+        int balance = 0;
+        List<String> options = new ArrayList<>();
 
-        while (true) {
-            alt.options.add(parseSequence());
+        while (index < regex.length()) {
+            char c = regex.charAt(index);
+            if (c == '(') balance++;
+            if (c == ')') balance--;
 
-            if (index >= regex.length() || regex.charAt(index) != '|') break;
-            index++; // skip '|'
+            if (c == '|' && balance == 0) {
+                options.add(sb.toString());
+                sb.setLength(0);
+            } else {
+                sb.append(c);
+            }
+
+            if (balance < 0) break; // end of current group
+            index++;
+        }
+        options.add(sb.toString());
+
+        for (String opt : options) {
+            RegexParser parser = new RegexParser(opt);
+            alt.options.add(parser.parseSequence());
         }
 
         return alt.options.size() == 1 ? alt.options.get(0) : alt;
@@ -55,21 +73,13 @@ public class RegexParser {
 
         char c = regex.charAt(index);
 
-        if (c == '*') {
-            index++;
-            return new RepetitionNode(node, 0, 5);
-        } else if (c == '+') {
-            index++;
-            return new RepetitionNode(node, 1, 5);
-        } else if (c == '?') {
-            index++;
-            return new RepetitionNode(node, 0, 1);
-        } else if (c == '{') {
+        if (c == '*') { index++; return new RepetitionNode(node, 0, 5); }
+        if (c == '+') { index++; return new RepetitionNode(node, 1, 5); }
+        if (c == '?') { index++; return new RepetitionNode(node, 0, 1); }
+        if (c == '{') {
             index++;
             int num = 0;
-            while (Character.isDigit(regex.charAt(index))) {
-                num = num * 10 + (regex.charAt(index++) - '0');
-            }
+            while (Character.isDigit(regex.charAt(index))) num = num*10 + (regex.charAt(index++)-'0');
             index++; // skip '}'
             return new RepetitionNode(node, num, num);
         }

@@ -9,17 +9,17 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Select a grammar variant:");
-        System.out.println("  1 - input.txt  (Variant 5)");
-        System.out.println("  2 - input1.txt (Variant 2)");
-        System.out.println("  3 - input2.txt (Variant 3)");
+        System.out.println("  1 - input.txt");
+        System.out.println("  2 - input1.txt");
+        System.out.println("  3 - input2.txt");
         System.out.print("Enter choice (1/2/3): ");
 
         String choice = scanner.nextLine().trim();
         String inputFile;
         switch (choice) {
-            case "1": inputFile = "input.txt";  break;
-            case "2": inputFile = "input1.txt"; break;
-            case "3": inputFile = "input2.txt"; break;
+            case "1": inputFile = "src/cnf/input.txt";  break;
+            case "2": inputFile = "src/cnf/input1.txt"; break;
+            case "3": inputFile = "src/cnf/input2.txt"; break;
             default:
                 System.out.println("Invalid choice. Defaulting to input.txt");
                 inputFile = "input.txt";

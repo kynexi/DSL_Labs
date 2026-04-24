@@ -1,0 +1,131 @@
+=== Input Grammar ===
+  V_N   : [S, A, B, C, D]
+  V_T   : [a, b, d]
+  Start : S
+  Rules :
+     1.  S → d B
+     2.  S → A
+     3.  A → d
+     4.  A → d S
+     5.  A → a B d B
+     6.  B → a
+     7.  B → a S
+     8.  B → A C
+     9.  D → A B
+    10.  C → b C
+    11.  C → ε
+
+=== Step 1: Eliminate Epsilon Productions ===
+  V_N   : [S, A, B, C, D]
+  V_T   : [a, b, d]
+  Start : S
+  Rules :
+     1.  S → d B
+     2.  S → A
+     3.  A → d
+     4.  A → d S
+     5.  A → a B d B
+     6.  B → a
+     7.  B → a S
+     8.  B → A C
+     9.  B → A
+    10.  D → A B
+    11.  C → b C
+    12.  C → b
+    13.  C → ε
+
+=== Step 2: Eliminate Renamings ===
+  V_N   : [S, A, B, C, D]
+  V_T   : [a, b, d]
+  Start : S
+  Rules :
+     1.  S → d B
+     2.  S → d
+     3.  S → d S
+     4.  S → a B d B
+     5.  A → d
+     6.  A → d S
+     7.  A → a B d B
+     8.  B → a
+     9.  B → a S
+    10.  B → A C
+    11.  B → d
+    12.  B → d S
+    13.  B → a B d B
+    14.  C → b C
+    15.  C → b
+    16.  C → ε
+    17.  D → A B
+
+=== Step 3: Eliminate Inaccessible Symbols ===
+  V_N   : [S, A, B, C]
+  V_T   : [a, b, d]
+  Start : S
+  Rules :
+     1.  S → d B
+     2.  S → d
+     3.  S → d S
+     4.  S → a B d B
+     5.  A → d
+     6.  A → d S
+     7.  A → a B d B
+     8.  B → a
+     9.  B → a S
+    10.  B → A C
+    11.  B → d
+    12.  B → d S
+    13.  B → a B d B
+    14.  C → b C
+    15.  C → b
+    16.  C → ε
+
+=== Step 4: Eliminate Non-Productive Symbols ===
+  V_N   : [S, A, B, C]
+  V_T   : [a, b, d]
+  Start : S
+  Rules :
+     1.  S → d B
+     2.  S → d
+     3.  S → d S
+     4.  S → a B d B
+     5.  A → d
+     6.  A → d S
+     7.  A → a B d B
+     8.  B → a
+     9.  B → a S
+    10.  B → A C
+    11.  B → d
+    12.  B → d S
+    13.  B → a B d B
+    14.  C → b C
+    15.  C → b
+
+=== Step 5: Chomsky Normal Form ===
+  V_N   : [S, A, B, C, X1, X2, X3, X4, X5, X6, X7, X8, X9]
+  V_T   : [a, b, d]
+  Start : S
+  Rules :
+     1.  S → X3 B
+     2.  S → d
+     3.  S → X3 S
+     4.  S → X1 X4
+     5.  X4 → B X7
+     6.  X7 → X3 B
+     7.  A → d
+     8.  A → X3 S
+     9.  A → X1 X5
+    10.  X5 → B X8
+    11.  X8 → X3 B
+    12.  B → a
+    13.  B → X1 S
+    14.  B → A C
+    15.  B → d
+    16.  B → X3 S
+    17.  B → X1 X6
+    18.  X6 → B X9
+    19.  X9 → X3 B
+    20.  C → X2 C
+    21.  C → b
+    22.  X1 → a
+    23.  X2 → b
+    24.  X3 → d

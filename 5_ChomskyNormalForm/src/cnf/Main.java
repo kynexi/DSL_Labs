@@ -1,11 +1,31 @@
 package cnf;
 
 import java.io.*;
+import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        Grammar grammar = GrammarParser.parse("C:\\Users\\vasya\\Desktop\\DSL\\DSL_Labs\\5_ChomskyNormalForm\\src\\cnf\\input.txt");
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Select a grammar variant:");
+        System.out.println("  1 - input.txt  (Variant 5)");
+        System.out.println("  2 - input1.txt (Variant 2)");
+        System.out.println("  3 - input2.txt (Variant 3)");
+        System.out.print("Enter choice (1/2/3): ");
+
+        String choice = scanner.nextLine().trim();
+        String inputFile;
+        switch (choice) {
+            case "1": inputFile = "input.txt";  break;
+            case "2": inputFile = "input1.txt"; break;
+            case "3": inputFile = "input2.txt"; break;
+            default:
+                System.out.println("Invalid choice. Defaulting to input.txt");
+                inputFile = "input.txt";
+        }
+
+        Grammar grammar = GrammarParser.parse(inputFile);
         CNFConverter converter = new CNFConverter();
 
         try (PrintWriter out = new PrintWriter(new FileWriter("output.txt"))) {

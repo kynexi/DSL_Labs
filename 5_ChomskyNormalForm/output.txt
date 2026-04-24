@@ -32,7 +32,6 @@
     10.  D → A B
     11.  C → b C
     12.  C → b
-    13.  C → ε
 
 === Step 2: Eliminate Renamings ===
   V_N   : [S, A, B, C, D]
@@ -54,8 +53,7 @@
     13.  B → a B d B
     14.  C → b C
     15.  C → b
-    16.  C → ε
-    17.  D → A B
+    16.  D → A B
 
 === Step 3: Eliminate Inaccessible Symbols ===
   V_N   : [S, A, B, C]
@@ -77,7 +75,6 @@
     13.  B → a B d B
     14.  C → b C
     15.  C → b
-    16.  C → ε
 
 === Step 4: Eliminate Non-Productive Symbols ===
   V_N   : [S, A, B, C]

@@ -66,8 +66,9 @@ public class CNFConverter {
         // 1b. Expand productions: drop nullable symbols in every possible subset
         Set<Production> newProds = new LinkedHashSet<>();
         for (Production p : g.getProductions()) {
+            if (p.isEpsilon()) continue;                      // drop bare ε rules entirely
             for (List<String> combo : generateCombinations(p.getRhs(), nullable)) {
-                if (!combo.isEmpty()) {                       // drop pure ε
+                if (!combo.isEmpty()) {                       // drop empty combos
                     newProds.add(new Production(p.getLhs(), combo));
                 }
             }

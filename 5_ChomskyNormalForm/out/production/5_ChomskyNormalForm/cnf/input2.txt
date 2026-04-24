@@ -1,0 +1,21 @@
+# Variant 2 Grammar
+# V_N = {S, A, B, C, D}
+# V_T = {a, b}
+
+NONTERMINALS: S, A, B, C, D
+TERMINALS: a, b
+START: S
+
+PRODUCTIONS:
+S -> a B
+S -> b A
+A -> B
+A -> b
+A -> a D
+A -> A S
+A -> b A A B
+A -> eps
+B -> b
+B -> b S
+C -> A B
+D -> B B

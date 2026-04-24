@@ -1,0 +1,93 @@
+Regex: (a|b)(c|d)E+G?
+  -> acEEEEEG
+  -> adEEEE
+  -> adEEG
+  -> acE
+  -> bcEG
+Processing steps:
+  Parsing and generation steps for regex: (a|b)(c|d)E+G?
+  Sequence start
+    Alternation start, choosing one option
+      Literal: 'b'
+    Alternation end
+    Alternation start, choosing one option
+      Literal: 'c'
+    Alternation end
+    Repetition: repeat 4 times (min=1, max=5)
+      Literal: 'E'
+      Literal: 'E'
+      Literal: 'E'
+      Literal: 'E'
+    End repetition
+    Repetition: repeat 1 times (min=0, max=1)
+      Literal: 'G'
+    End repetition
+  Sequence end
+
+----------------------
+
+Regex: P(Q|R|S)T(UV|W|X)*Z+
+  -> PRTZZZ
+  -> PRTUVUVZ
+  -> PRTWZZZZ
+  -> PSTUVWWUVZZ
+  -> PSTZZZZ
+Processing steps:
+  Parsing and generation steps for regex: P(Q|R|S)T(UV|W|X)*Z+
+  Sequence start
+    Literal: 'P'
+    Alternation start, choosing one option
+      Literal: 'Q'
+    Alternation end
+    Literal: 'T'
+    Repetition: repeat 0 times (min=0, max=5)
+    End repetition
+    Repetition: repeat 4 times (min=1, max=5)
+      Literal: 'Z'
+      Literal: 'Z'
+      Literal: 'Z'
+      Literal: 'Z'
+    End repetition
+  Sequence end
+
+----------------------
+
+Regex: 1(0|1)*2(3|4){5}36
+  -> 111123334436
+  -> 100123433336
+  -> 1010124444336
+  -> 101123334436
+  -> 11010023434336
+Processing steps:
+  Parsing and generation steps for regex: 1(0|1)*2(3|4){5}36
+  Sequence start
+    Literal: '1'
+    Repetition: repeat 1 times (min=0, max=5)
+      Alternation start, choosing one option
+        Literal: '1'
+      Alternation end
+    End repetition
+    Literal: '2'
+    Repetition: repeat 5 times (min=5, max=5)
+      Alternation start, choosing one option
+        Literal: '3'
+      Alternation end
+      Alternation start, choosing one option
+        Literal: '4'
+      Alternation end
+      Alternation start, choosing one option
+        Literal: '4'
+      Alternation end
+      Alternation start, choosing one option
+        Literal: '3'
+      Alternation end
+      Alternation start, choosing one option
+        Literal: '4'
+      Alternation end
+    End repetition
+    Literal: '3'
+    Literal: '6'
+  Sequence end
+
+----------------------
+

@@ -246,6 +246,14 @@ public class CNFConverter {
             newProds = pass;
         }
 
+        boolean dedupChanged = true;
+        while (dedupChanged) {
+            int before = newNT.size();
+            newProds = deduplicateHelpers(newNT, newProds, g.getNonTerminals());
+            dedupChanged = newNT.size() < before;
+        }
+        LinkedHashSet<Production> dedupedProds = new LinkedHashSet<>(newProds);
+        newProds = new ArrayList<>(dedupedProds);
         return new Grammar(newNT, g.getTerminals(), newProds, g.getStartSymbol());
     }
 
@@ -253,5 +261,51 @@ public class CNFConverter {
         String candidate;
         do { candidate = "X" + (++freshCounter); } while (existing.contains(candidate));
         return candidate;
+    }
+
+    private List<Production> deduplicateHelpers(Set<String> ntSet,
+                                                List<Production> prods,
+                                                Set<String> originalNTs) {
+        // Map: RHS list → canonical NT name
+        Map<List<String>, String> rhsToCanonical = new LinkedHashMap<>();
+        // Map: duplicate NT → canonical NT it should be replaced with
+        Map<String, String> replacements = new LinkedHashMap<>();
+
+        for (Production p : prods) {
+            String lhs = p.getLhs();
+            // Only deduplicate fresh helper symbols, never original non-terminals
+            if (originalNTs.contains(lhs)) continue;
+            List<String> rhs = p.getRhs();
+            if (rhsToCanonical.containsKey(rhs)) {
+                String canonical = rhsToCanonical.get(rhs);
+                if (!canonical.equals(lhs)) {
+                    replacements.put(lhs, canonical);
+                }
+            } else {
+                rhsToCanonical.put(rhs, lhs);
+            }
+        }
+
+        if (replacements.isEmpty()) return prods;
+
+        // Remove duplicate NTs from the NT set
+        ntSet.removeAll(replacements.keySet());
+
+        // Rewrite all productions: drop productions whose LHS is a duplicate,
+        // and substitute any RHS references to duplicates with the canonical NT.
+        List<Production> result = new ArrayList<>();
+        for (Production p : prods) {
+            if (replacements.containsKey(p.getLhs())) continue; // drop duplicate definition
+
+            List<String> newRhs = new ArrayList<>();
+            boolean changed = false;
+            for (String sym : p.getRhs()) {
+                String canon = replacements.getOrDefault(sym, sym);
+                newRhs.add(canon);
+                if (!canon.equals(sym)) changed = true;
+            }
+            result.add(changed ? new Production(p.getLhs(), newRhs) : p);
+        }
+        return result;
     }
 }

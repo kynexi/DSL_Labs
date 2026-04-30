@@ -220,129 +220,125 @@ if (rhs.size() > 2) {
 
 ```
 === Input Grammar ===
-  V_N   : [S, A, B, C, D]
-  V_T   : [a, b, d]
+  V_N   : [S, A, B, C, E]
+  V_T   : [a, d]
   Start : S
   Rules :
      1.  S → d B
      2.  S → A
      3.  A → d
      4.  A → d S
-     5.  A → a B d B
-     6.  B → a
+     5.  A → a A d A B
+     6.  B → a C
      7.  B → a S
      8.  B → A C
-     9.  D → A B
-    10.  C → b C
-    11.  C → ε
+     9.  C → ε
+    10.  E → A S
 
 === Step 1: Eliminate Epsilon Productions ===
-  V_N   : [S, A, B, C, D]
-  V_T   : [a, b, d]
+  V_N   : [S, A, B, C, E]
+  V_T   : [a, d]
   Start : S
   Rules :
      1.  S → d B
      2.  S → A
      3.  A → d
      4.  A → d S
-     5.  A → a B d B
-     6.  B → a
-     7.  B → a S
-     8.  B → A C
-     9.  B → A
-    10.  D → A B
-    11.  C → b C
-    12.  C → b
+     5.  A → a A d A B
+     6.  B → a C
+     7.  B → a
+     8.  B → a S
+     9.  B → A C
+    10.  B → A
+    11.  E → A S
 
 === Step 2: Eliminate Renamings ===
-  V_N   : [S, A, B, C, D]
-  V_T   : [a, b, d]
+  V_N   : [S, A, B, C, E]
+  V_T   : [a, d]
   Start : S
   Rules :
      1.  S → d B
      2.  S → d
      3.  S → d S
-     4.  S → a B d B
+     4.  S → a A d A B
      5.  A → d
      6.  A → d S
-     7.  A → a B d B
-     8.  B → a
-     9.  B → a S
-    10.  B → A C
-    11.  B → d
-    12.  B → d S
-    13.  B → a B d B
-    14.  C → b C
-    15.  C → b
-    16.  D → A B
+     7.  A → a A d A B
+     8.  B → a C
+     9.  B → a
+    10.  B → a S
+    11.  B → A C
+    12.  B → d
+    13.  B → d S
+    14.  B → a A d A B
+    15.  E → A S
 
 === Step 3: Eliminate Inaccessible Symbols ===
   V_N   : [S, A, B, C]
-  V_T   : [a, b, d]
+  V_T   : [a, d]
   Start : S
   Rules :
      1.  S → d B
      2.  S → d
      3.  S → d S
-     4.  S → a B d B
+     4.  S → a A d A B
      5.  A → d
      6.  A → d S
-     7.  A → a B d B
-     8.  B → a
-     9.  B → a S
-    10.  B → A C
-    11.  B → d
-    12.  B → d S
-    13.  B → a B d B
-    14.  C → b C
-    15.  C → b
+     7.  A → a A d A B
+     8.  B → a C
+     9.  B → a
+    10.  B → a S
+    11.  B → A C
+    12.  B → d
+    13.  B → d S
+    14.  B → a A d A B
 
 === Step 4: Eliminate Non-Productive Symbols ===
-  V_N   : [S, A, B, C]
-  V_T   : [a, b, d]
+  V_N   : [S, A, B]
+  V_T   : [a, d]
   Start : S
   Rules :
      1.  S → d B
      2.  S → d
      3.  S → d S
-     4.  S → a B d B
+     4.  S → a A d A B
      5.  A → d
      6.  A → d S
-     7.  A → a B d B
+     7.  A → a A d A B
      8.  B → a
      9.  B → a S
-    10.  B → A C
-    11.  B → d
-    12.  B → d S
-    13.  B → a B d B
-    14.  C → b C
-    15.  C → b
+    10.  B → d
+    11.  B → d S
+    12.  B → a A d A B
 
 === Step 5: Chomsky Normal Form ===
-  V_N   : [S, A, B, C, X1, X2, X3, X4, X7]
-  V_T   : [a, b, d]
+  V_N   : [S, A, B, X1, X2, X3, X4, X5, X6, X7, X8, X9, X10, X11]
+  V_T   : [a, d]
   Start : S
   Rules :
-     1.  S → X3 B
+     1.  S → X2 B
      2.  S → d
-     3.  S → X3 S
-     4.  S → X1 X4
-     5.  X4 → B X7
-     6.  X7 → X3 B
-     7.  A → d
-     8.  A → X3 S
-     9.  A → X1 X4
-    10.  B → a
-    11.  B → X1 S
-    12.  B → A C
-    13.  B → d
-    14.  B → X3 S
-    15.  B → X1 X4
-    16.  C → X2 C
-    17.  C → b
-    18.  X1 → a
-    19.  X2 → b
-    20.  X3 → d
+     3.  S → X2 S
+     4.  S → X1 X3
+     5.  X3 → A X6
+     6.  X6 → X2 X9
+     7.  X9 → A B
+     8.  A → d
+     9.  A → X2 S
+    10.  A → X1 X4
+    11.  X4 → A X7
+    12.  X7 → X2 X10
+    13.  X10 → A B
+    14.  B → a
+    15.  B → X1 S
+    16.  B → d
+    17.  B → X2 S
+    18.  B → X1 X5
+    19.  X5 → A X8
+    20.  X8 → X2 X11
+    21.  X11 → A B
+    22.  X1 → a
+    23.  X2 → d
 ```
 
 ## Conclusions

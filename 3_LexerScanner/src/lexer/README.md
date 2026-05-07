@@ -58,6 +58,8 @@ Using an enum ensures tokens are structured, consistent, and easy to reference i
 ### Token Class
 
 ```java
+import lexer.TokenType;
+
 public class Token {
 
     public TokenType type;
@@ -134,6 +136,9 @@ The Tokenizer just cuts the code into pieces called lexemes. For example, `x = s
 ### Lexer Class
 
 ```java
+import lexer.Token;
+import lexer.TokenType;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -147,49 +152,27 @@ public class Lexer {
 
             if (lexeme.matches("\\d+")) {
                 tokens.add(new Token(TokenType.INT, lexeme));
-            }
-
-            else if (lexeme.matches("\\d+\\.\\d+")) {
+            } else if (lexeme.matches("\\d+\\.\\d+")) {
                 tokens.add(new Token(TokenType.FLOAT, lexeme));
-            }
-
-            else if (lexeme.equals("+")) {
+            } else if (lexeme.equals("+")) {
                 tokens.add(new Token(TokenType.PLUS, lexeme));
-            }
-
-            else if (lexeme.equals("-")) {
+            } else if (lexeme.equals("-")) {
                 tokens.add(new Token(TokenType.MINUS, lexeme));
-            }
-
-            else if (lexeme.equals("*")) {
+            } else if (lexeme.equals("*")) {
                 tokens.add(new Token(TokenType.MULTIPLY, lexeme));
-            }
-
-            else if (lexeme.equals("/")) {
+            } else if (lexeme.equals("/")) {
                 tokens.add(new Token(TokenType.DIVIDE, lexeme));
-            }
-
-            else if (lexeme.equals("(")) {
+            } else if (lexeme.equals("(")) {
                 tokens.add(new Token(TokenType.LPAREN, lexeme));
-            }
-
-            else if (lexeme.equals(")")) {
+            } else if (lexeme.equals(")")) {
                 tokens.add(new Token(TokenType.RPAREN, lexeme));
-            }
-
-            else if (lexeme.equals("=")) {
+            } else if (lexeme.equals("=")) {
                 tokens.add(new Token(TokenType.ASSIGN, lexeme));
-            }
-
-            else if (lexeme.equals("sin")) {
+            } else if (lexeme.equals("sin")) {
                 tokens.add(new Token(TokenType.SIN, lexeme));
-            }
-
-            else if (lexeme.equals("cos")) {
+            } else if (lexeme.equals("cos")) {
                 tokens.add(new Token(TokenType.COS, lexeme));
-            }
-
-            else {
+            } else {
                 tokens.add(new Token(TokenType.IDENTIFIER, lexeme));
             }
         }

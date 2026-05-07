@@ -1,0 +1,16 @@
+Assignment
+  Variable: x
+  Value:
+    BinOp: +
+      Left:
+        Function: sin
+          Arg:
+            Number: 3.14
+      Right:
+        BinOp: *
+          Left:
+            Function: cos
+              Arg:
+                Number: 2.0
+          Right:
+            Number: 4.5
